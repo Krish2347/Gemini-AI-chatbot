@@ -1,18 +1,17 @@
 import speech_recognition as sr
 import google.generativeai as genai
-import pyttsx3
+import win32com.client
 from dotenv import load_dotenv
 import os
 load_dotenv()
-API_key = os.getenv("API_KEY")
+API_key = os.getenv("API_KEY") #Loading API key from .env file 
 genai.configure(api_key=API_key)
 model = genai.GenerativeModel('gemini-2.5-flash')
-engine = pyttsx3.init()
-engine.setProperty('rate', 180)
-engine.setProperty('volume', 1.0)
+speaker = win32com.client.Dispatch("SAPI.SpVoice") #configuring text to speech engine
+speaker.Rate = 2
 print("Welcome To Gemini, write 1 to login, 2 for Registeration, 3 to exit")
 while True:
-   decision = input("Login(1), register(2), exit(3)")
+   decision = input("Login(1), register(2), exit(3)") #main menu
    if decision in ("1", "2", "3"):
        if decision == "1":
         while True: 
@@ -61,8 +60,7 @@ while True:
                                             response = model.generate_content(user_Input)
                                             print("Gemini: ", response.text)
                                             reply = response.text
-                                            engine.say(reply)
-                                            engine.runAndWait()
+                                            speaker.speak(reply)
                                     except sr.UnknownValueError:
                                         print("Sorry, I could not understand what you said.")
                     elif wish == "3":
