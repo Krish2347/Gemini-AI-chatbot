@@ -17,18 +17,19 @@ while True:
         while True: 
            with open("gemini_login.txt") as Database:
             Login = False
-            Login_username = input("username(E to exit): ")
+            Login_email = input("Email(E to exit): ")
             Login_password = input("Password: ")
             for line in Database:
-              if Login_username + ", " + Login_password in line:
+              email, password, username = line.strip().split(", ")
+              if Login_email == email and Login_password == password:
                     Login = True
-           if Login_username == "E" or Login_username == "e":
+           if Login_email == "E" or Login_email == "e":
              print("Ok") 
              break   
            else:
             if Login == True:
                 print("Login Successful")
-                print("Welcome " + Login_username)
+                print("Welcome " + username)
                 while True:
                     wish = input("text mode(1) or Voice mode(2), Logout(3)")
                     if wish == "1": 
@@ -71,12 +72,27 @@ while True:
                 continue
             
        elif decision == "2":
-           Database = open("gemini_login.txt", "a")
-           Register_username = input("Username: ")
-           Register_password = input("password: ")
-           Database.write(Register_username + ", " + Register_password + "\n")
-           Database.close()     
-           print("Registration successful, Please login")
+        while True:
+           Register_email = input("Enter your Email: ")
+           if "@" in Register_email and "." in Register_email and Register_email.index("@") < Register_email.rindex("."): #checking if email is valid
+                Duplicate = False
+                with open("gemini_Login.txt", "r") as Database:
+                    for line in Database:
+                        if Register_email in line: #checking for Duplicates
+                            Duplicate = True
+                if Duplicate == True:
+                        print("User with this Email already exists")
+                        continue
+                else:
+                        Register_password = input("Choose a password: ")
+                        with open("gemini_Login.txt", "a") as Database:
+                            Register_Username = input("What should Gemini Call you?: ")
+                            Database.write(Register_email + ", " + Register_password + ", " + Register_Username + "\n") #writing the new user to the database
+                            print("Registration successful " + Register_Username + " Please login")
+                            break
+           else:
+               print("Invalid Email")
+               continue
        elif decision == "3":
            print("Exited")
            break
