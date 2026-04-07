@@ -4,3 +4,4 @@ __pycache__/
 venv/
 gemini_login.txt
 .vscode
+Gemini copy.py
